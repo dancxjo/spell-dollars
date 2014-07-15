@@ -2,11 +2,34 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<style>
+			.error {
+				color: red;
+			}
+		</style>
 		<script  type="text/javascript" src="demo1.js"></script>
 		<script type="text/javascript">
 		  function doDemos() {
 		    var numeric = document.getElementById("numeric").value;
-		    document.getElementById("spelledOut").innerHTML = demo1(numeric);
+		    var outputDiv = document.getElementById("spelledOut");
+		    outputDiv.innerHTML = "";
+		    
+		    var demos = [demo1];		    		    
+		    for (var i in demos) {
+		    	var demo = demos[i];
+		    	var heading = document.createElement("h2");
+		    	heading.innerHTML = demo.name;
+		    	outputDiv.appendChild(heading);
+		    	var para = document.createElement("p");
+		    	
+			    try {		    				    	
+			    	para.innerHTML = demo(numeric);			    	
+			    } catch (err) {
+			    	para.innerHTML = err;
+			    	para.className = "error";
+			    }
+			    outputDiv.appendChild(para);
+			  }
 		  }
 		</script>
 	</head>
@@ -23,7 +46,7 @@
 	    <div>
 	      <label for="numeric">Enter a dollar amount:</label>
 	      <input type="text" id="numeric" placeholder="$987.52"/>
-	      <p id="spelledOut"></p>
+	      <div id="spelledOut"></div>
 	    </div>
 	    <input type="submit" value="Spell out"/>
 	  </form>
