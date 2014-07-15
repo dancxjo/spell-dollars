@@ -13,7 +13,7 @@ function demo1(numeric) {
   var text = "";
   
   // Validation of the input
-  if (numeric.length() < 1) {
+  if (numeric.length < 1) {
     throwFormatError();
   }
   
@@ -27,7 +27,7 @@ function demo1(numeric) {
   // Validate that cents portion is either of length 0 or 2
   var decimalPos = numeric.lastIndexOf(".");
   
-  if (decimalPos != -1 && decimalPos != numeric.length() - 4) {
+  if (decimalPos != -1 && decimalPos != numeric.length - 4) {
     throwFormatError();
   }
   
