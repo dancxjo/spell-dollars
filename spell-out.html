@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script  type="text/javascript" src="demo1.js"></script>
+		<script type="text/javascript">
+		  function doDemos() {
+		    var numeric = document.getElementById("numeric").value;
+		    document.getElementById("spelledOut").innerHTML = demo1();
+		  }
+		</script>
+	</head>
+	<body>
+	  <h1>Spell Dollars</h1>
+	  <p>This is a demonstration of my programming skills. It is a response
+	  to <a href="http://programmers.stackexchange.com/questions/160545/what-do-employers-look-for-in-self-taught-applicants">this thread</a>.</p>
+	  <p>The programs take a dollar amount in the form $987.52, for example, 
+	  and convert it to "nine hundred eighty-seven dollars and fifty-two cents."
+	  Incompatible entries produce an exception.</p>
+	  <p>Ultimately, I plan to execute this in several different languages, 
+	  using several different approaches.</p>
+	  <form action="#" onsubmit="doDemos()">
+	    <div>
+	      <label for="numeric">Enter a dollar amount:</label>
+	      <input type="text" id="numeric" placeholder="$987.52"/>
+	      <p id="spelledOut"></p>
+	    </div>
+	    <input type="submit" value="Spell out"/>
+	  </form>
+	</body>
+</html>
