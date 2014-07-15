@@ -24,8 +24,18 @@ function demo1(numeric) {
   // Strip off the dollar sign
   numeric = numeric.substring(1);
   
+  // Validate that cents portion is either of length 0 or 2
   var decimalPos = numeric.lastIndexOf(".");
   
+  if (decimalPos != -1 && decimalPos != numeric.length() - 4) {
+    throwFormatError();
+  }
+  
+  var cents = numeric.substring(decimalPos);
+  
+  numeric = numeric.substring(0, decimalPos - 1);
+  
+  text = numeric + " / " + cents;
   return text;
 }
 
