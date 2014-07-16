@@ -31,6 +31,12 @@ const std::string powerName[21] = {
 
 template <class T>
 std::string Spellable<T>::spell() {
+	// Handle negatives
+	if (*value < 0) {
+		Spellable<T> positive(*value * -1);
+		return "negative " + positive.spell();
+	}
+	
 	// Handle the fractional part first
 	int l = floor(log10(*value));
 	double f = *value - floor(*value);
