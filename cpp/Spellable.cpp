@@ -94,8 +94,6 @@ std::string Spellable<T>::spell() {
 		std::string prefix;
 	
 		switch (l) {
-		case 0:
-			
 		case 1:
 			head.SetValue(head.GetValue() * 10);
 			midfix = "";
