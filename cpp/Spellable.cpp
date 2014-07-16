@@ -4,9 +4,9 @@
 #include "Spellable.h"
 
 const std::string powerName[21] = {
-  "thousand", 
-    "million", 
-    "billion", 
+	"thousand", 
+	"million", 
+	"billion", 
 	"trillion", 
 	"quadrillion", 
 	"quintillion", 
@@ -32,7 +32,7 @@ std::string Spellable<T>::spell() {
 	int i = (int) *value; // Only use this for small values
 	
 	switch (i) {
-    case 0: return "zero";
+	case 0: return "zero";
 	case 1: return "one";
 	case 2: return "two";
 	case 3: return "three";
@@ -65,27 +65,27 @@ std::string Spellable<T>::spell() {
 	T l = floor(log10(*value));    	
 	T head = floor(*value / pow(10, l));
 	T tail = *value - (head * pow(10, l));
-    Spellable<T> h;
-    Spellable<T> t;
+	Spellable<T> h;
+	Spellable<T> t;
     
-  switch (l) {
-  case 1:
-  	head *= 10;
-  	h(&head);
-  	t(&tail);
-  	return h.spell() + "-" + t.spell();
-  case 2: 
-  	h(&head);
-  	t(&tail);
-  	return h.spell() + " hundred" + (tail > 0 ? " " + t.spell() : "");
-  default:
-	int p = floor(l/3 - 1);	// the index of the prefix						
-	head = floor(*value / pow(10, l - l % 3));
-	tail = *value - (head * pow(10, l - l % 3));
-	h(&head);
-  	t(&tail);
-	return h.spell() + " " + powerName[p] + (tail > 0 ? " " + t.spell : "");
-    }
+	switch (l) {
+	case 1:
+		head *= 10;
+		h(&head);
+		t(&tail);
+		return h.spell() + "-" + t.spell();
+	case 2: 
+		h(&head);
+		t(&tail);
+		return h.spell() + " hundred" + (tail > 0 ? " " + t.spell() : "");
+	default:
+		int p = floor(l/3 - 1);	// the index of the prefix						
+		head = floor(*value / pow(10, l - l % 3));
+		tail = *value - (head * pow(10, l - l % 3));
+		h(&head);
+		t(&tail);
+		return h.spell() + " " + powerName[p] + (tail > 0 ? " " + t.spell : "");
+	}
 
-  return "unspellable value";
+	return "unspellable value";
 }
