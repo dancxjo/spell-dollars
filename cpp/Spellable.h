@@ -7,7 +7,7 @@
 template <class T>
 
 class Spellable {
-    T* value;
+	T* value;
 public:
 	Spellable(T* value): value(value) {};
 	std::string spell();
