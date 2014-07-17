@@ -61,8 +61,7 @@ std::string Spellable<T>::spellFraction() {
 		precision--;
 	}		
 	
-	Spellable<long long> numerator(floor(n));
-	std::cout << numerator.spell() << std::endl;
+	Spellable<long long> numerator(floor(n));	
 	std::string denominator;
 	
 	switch (precision) {
@@ -82,7 +81,7 @@ std::string Spellable<T>::spellFraction() {
 }
 
 template <class T>
-std::string Spellable<T>::spell() {
+std::string Spellable<T>::spell() {	
 	// Handle negatives
 	if (*value < 0) {
 		Spellable<T> positive(*value * -1);
@@ -135,8 +134,8 @@ std::string Spellable<T>::spell() {
 		}	
 		
 		Spellable<T> head(floor(*value / pow(10,  l)));
-		Spellable<T> tail(*value - (head.GetValue() * pow(10,  l)));
-	
+		Spellable<T> tail((T)(*value - (T)(head.GetValue() * (T)pow(10,  l))));		
+		
 		std::string midfix;
 		std::string prefix;
 	
@@ -153,7 +152,7 @@ std::string Spellable<T>::spell() {
 		default:
 			int p = floor(l/3 - 1);
 			head = floor(*value / pow(10,  l - l % 3));
-			tail = *value - (head.GetValue() * pow(10,  l - l % 3));			
+			tail = (T)(*value - (T)(head.GetValue() * (T)pow(10,  l - l % 3)));			
 			midfix = " " + POWERNAME[p];
 			prefix = " ";
 			break;
