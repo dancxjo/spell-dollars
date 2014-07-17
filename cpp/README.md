@@ -8,3 +8,8 @@ operators.)
 
 Moving forward, I will implement a subclass of Spellable that handles unitized
 amounts (i.e. quantities). Then as a subclass of that, I can implement dollars.
+
+==Compiling==
+Since Spellable uses a class template, linking is quirky. To overcome this, I've
+included Spellable.cpp in Spellable.h (so including Spellable.h includes Spellable.cpp).
+It is, therefore, unneccessary to compile and link Spellable.cpp.
