@@ -4,7 +4,7 @@
 
 //#include "Spellable.h"
 
-const std::string powerName[21] = {
+const std::string POWERNAME[21] = {
 	"thousand",
 	"million",
 	"billion",
@@ -70,7 +70,7 @@ std::string Spellable<T>::spellFraction() {
 		case 1: denominator = "tenth"; break;
 		case 2: denominator = "hundredth"; break;
 		default:
-			denominator = powerName[(int)floor(precision/3 - 1)] + "th";
+			denominator = POWERNAME[(int)floor(precision/3 - 1)] + "th";
 			switch(precision % 3) {
 				case 1: denominator = "ten " + denominator; break;
 				case 2: denominator = "hundred " + denominator; break;
@@ -154,7 +154,7 @@ std::string Spellable<T>::spell() {
 			int p = floor(l/3 - 1);
 			head = floor(*value / pow(10,  l - l % 3));
 			tail = *value - (head.GetValue() * pow(10,  l - l % 3));			
-			midfix = " " + powerName[p];
+			midfix = " " + POWERNAME[p];
 			prefix = " ";
 			break;
 		}
