@@ -42,13 +42,12 @@ int main(int argc, char** argv) {
 	
 	// We can handle assignment and negative numbers
 	sg = -4234.62;
-	cout << sg.GetValue() << endl  << sg.spell() << endl;	
-	return 0;
-	
-	// TODO: This is the largest long long and it is off by one
-	// Slightly smaller numbers are off by an order of magnitude
-	//Spellable<long long> sm(9223372036854775807);
+	cout << sg.GetValue() << endl  << sg.spell() << endl;		
+		
+	Spellable<long long> sm(9223372036854775807);
   	  	
-  	//cout << sm.GetValue() << endl  << sm.spell() << endl << endl;
+  	cout << sm.GetValue() << endl  << sm.spell() << endl << endl;
+  	
+  	return 0;
 		
 }
