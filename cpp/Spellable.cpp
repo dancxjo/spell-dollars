@@ -1,6 +1,5 @@
 #include <cmath>
 #include <iostream>
-#include <sstream>
 #include <string>
 
 //#include "Spellable.h"
@@ -29,6 +28,59 @@ const std::string powerName[21] = {
 	"vigintillion"
 };
 
+/**
+ * Necesitated due to the intricacies of determining precision.
+ * Handling this as part of a recursive spell() makes impossible
+ * determining the number of significant digits in the integer
+ * part of the number, which is necessary for floating precision.
+ *
+ * @return			the spelling of the fractional portion
+ */
+template <class T>
+std::string Spellable<T>::spellFraction() {	
+	double n = *value - floor(*value);
+	
+	// We could get deep into floating point math. http://www.jbox.dk/sanos/source/lib/fcvt.c.html
+	// See also http://pastebin.com/c84Dbvd7, http://stackoverflow.com/questions/7228438/convert-double-float-to-string			
+	int precision = std::cout.precision();
+	
+	bool fixed = (std::cout.flags() & std::ios::floatfield & std::ios::fixed) != 0;
+	bool scientific = (std::cout.flags() & std::ios::floatfield & std::ios::scientific) != 0;
+
+	if (!fixed && !scientific) {
+		// Account for the digits taken by the integer part
+		precision -= floor(log10(*value)) + 1;
+	}		
+	
+	n *= pow(10, precision);
+	n = round(n);
+	
+	// Now cancel 0's. 
+	while (n/10 == floor(n/10)) {
+		n /= 10;
+		precision--;
+	}		
+	
+	Spellable<long long> numerator(floor(n));
+	std::cout << numerator.spell() << std::endl;
+	std::string denominator;
+	
+	switch (precision) {
+		case 0: denominator = "one"; break; // This shouldn't happen
+		case 1: denominator = "tenth"; break;
+		case 2: denominator = "hundredth"; break;
+		default:
+			denominator = powerName[(int)floor(precision/3 - 1)] + "th";
+			switch(precision % 3) {
+				case 1: denominator = "ten " + denominator; break;
+				case 2: denominator = "hundred " + denominator; break;
+			}
+			break;
+	}
+			
+	return numerator.spell() + " " + denominator + (n == 1 ? "" : "s");
+}
+
 template <class T>
 std::string Spellable<T>::spell() {
 	// Handle negatives
@@ -37,30 +89,19 @@ std::string Spellable<T>::spell() {
 		return "negative " + positive.spell();
 	}
 	
-	// Handle the fractional part first
+	// l is the number of places in the number's integer part
 	int l = floor(log10(*value));
+	
+	// Handle the fractional part first		
+	if (*value > 0 && *value < 1) {
+		return spellFraction();
+	}
+	
 	double f = *value - floor(*value);
 				
 	if (f > 0) {
 		Spellable<T> integer(*value - f);
-		
-		std::ostringstream os;		
-		
-		// TODO: Only subtract l if floatfield is fixed!
-		int precision = std::cout.precision() - l;		
-		
-		Spellable<int> d(pow(10, precision - 1));
-		Spellable<int> n(floor(f * d.GetValue()));
-		
-		std::string denominator = d.spell();
-		// Resorting to some string manipulation
-		if (denominator.substr(0, 3) == "one") {
-			denominator = denominator.substr(4);
-		}
-		
-		os << " and " << n.spell() << " " << denominator << "th" << (n == 1 ? "" : "s");
-		
-		return integer.spell() + os.str();
+		return integer.spell() + " and " + spellFraction();
 	} else {
 		switch ((int) *value) {
 		case 0: return "zero";
@@ -93,8 +134,8 @@ std::string Spellable<T>::spell() {
 		case 90: return "ninety";
 		}	
 		
-		Spellable<T> head(floor(*value / pow(10, l)));
-		Spellable<T> tail(*value - (head.GetValue() * pow(10, l)));
+		Spellable<T> head(floor(*value / pow(10,  l)));
+		Spellable<T> tail(*value - (head.GetValue() * pow(10,  l)));
 	
 		std::string midfix;
 		std::string prefix;
@@ -111,8 +152,8 @@ std::string Spellable<T>::spell() {
 			break;
 		default:
 			int p = floor(l/3 - 1);
-			head = floor(*value / pow(10, l - l % 3));
-			tail = *value - (head.GetValue() * pow(10, l - l % 3));			
+			head = floor(*value / pow(10,  l - l % 3));
+			tail = *value - (head.GetValue() * pow(10,  l - l % 3));			
 			midfix = " " + powerName[p];
 			prefix = " ";
 			break;
