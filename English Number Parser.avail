@@ -1,0 +1,188 @@
+Module "English Number Parser"
+Uses "Avail"
+Entries
+  "_trillion_",
+  "_trillion",
+  "_billion_",
+  "_billion",
+  "_million_",
+  "_million",
+  "_thousand_",
+  "_thousand",
+  "_hundred_",
+  "_hundred",
+  "a",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve",
+  "thirteen",
+  "fourteen",
+  "fifteen",
+  "sixteen",
+  "seventeen",
+  "eighteen",
+  "nineteen",
+  "twenty",
+  "twenty-_",
+  "thirty",
+  "thirty-_",
+  "forty",
+  "forty-_",
+  "fifty",
+  "fifty-_",
+  "sixty",
+  "sixty-_",
+  "seventy",
+  "seventy-_",
+  "eighty",
+  "eighty-_",
+  "ninety",
+  "ninety-_"
+Body
+
+Method "a" is [ 1 ];
+
+Method "_trillion_" is [
+  multiplicand : [1..999],
+  addend: [1..999999999999]
+|
+  1000000000000 × multiplicand + addend
+];
+
+Method "_trillion" is [
+  multiplicand : [1..999]
+|
+  1000000000000 × multiplicand
+];
+
+
+Method "_billion_" is [
+  multiplicand : [1..999],
+  addend: [1..999999999]
+|
+  1000000000 × multiplicand + addend
+];
+
+Method "_billion" is [
+  multiplicand : [1..999]
+|
+  1000000000 × multiplicand
+];
+
+
+Method "_million_" is [
+  multiplicand : [1..999],
+  addend: [1..999999]
+|
+  1000000 × multiplicand + addend
+];
+
+Method "_million" is [
+  multiplicand : [1..999]
+|
+  1000000 × multiplicand
+];
+
+Method "_hundred_" is [
+  multiplicand : [1..9],
+  addend: [1..99]
+|
+  100 × multiplicand + addend
+];
+
+Method "_thousand_" is [
+  multiplicand : [1..999],
+  addend : [1..999]
+|
+  1000 × multiplicand + addend
+];
+
+Method "_hundred" is [
+  multiplicand : [1..9]
+|
+  100 × multiplicand
+];
+
+Method "_thousand" is [
+  multiplicand : [1..999]
+|
+  1000 × multiplicand
+];
+
+
+Method "one" is [ 1 ];
+Method "two" is [ 2 ];
+Method "three" is [ 3 ];
+Method "four" is [ 4 ];
+Method "five" is [ 5 ];
+Method "six" is [ 6 ];
+Method "seven" is [ 7 ];
+Method "eight" is [ 8 ];
+Method "nine" is [ 9 ];
+Method "ten" is [ 10 ];
+Method "eleven" is [ 11 ];
+Method "twelve" is [ 12 ];
+Method "thirteen" is [ 13 ];
+Method "fourteen" is [ 14 ];
+Method "fifteen" is [ 15 ];
+Method "sixteen" is [ 16 ];
+Method "seventeen" is [ 17 ];
+Method "eighteen" is [ 18 ];
+Method "nineteen" is [ 19 ];
+Method "twenty" is [ 20 ];
+Method "twenty-_" is [
+  addend : [1..9]
+|
+  20 + addend
+];
+Method "thirty" is [ 30 ];
+Method "thirty-_" is [
+  addend : [1..9]
+|
+  30 + addend
+];
+Method "forty" is [ 40 ];
+Method "forty-_" is [
+  addend : [1..9]
+|
+  40 + addend
+];
+Method "fifty" is [ 50 ];
+Method "fifty-_" is [
+  addend : [1..9]
+|
+  50 + addend
+];
+Method "sixty" is [ 60 ];
+Method "sixty-_" is [
+  addend : [1..9]
+|
+  60 + addend
+];
+Method "seventy" is [ 70 ];
+Method "seventy-_" is [
+  addend : [1..9]
+|
+  70 + addend
+];
+Method "eighty" is [ 80 ];
+Method "eighty-_" is [
+  addend : [1..9]
+|
+  80 + addend
+];
+Method "ninety" is [ 90 ];
+Method "ninety-_" is [
+  addend : [1..9]
+|
+  90 + addend
+];
