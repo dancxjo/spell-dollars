@@ -109,7 +109,7 @@ PositionalNumberSystem.prototype = {
       var order = arr.length - 1 - index;
       var orderName = higherOrders[order];
       return (previous + (current ? current + (orderName?' ' + orderName : ''):'')).trim();
-    }, '');
+    }, '') || this.digits[0].name;
   },
 
   spell: function (value) {
@@ -164,9 +164,23 @@ for (var i in bases) {
   console.log(base.encode(m-1), base.spell(m-1));
 }
 
-for (var n = 144; n > 0;) {
+for (var n = 144; n > 0; n--) {
   var s = dozenal.spell(n).replace(/^([a-z])/, function (m, m1) { return m1.toUpperCase();});
-  var v = dozenal.encode(n);
-  var p = dozenal.spell(--n).replace(/^([a-z])/, function (m, m1) { return m1.toUpperCase();});
-  console.log(s + ' (' + v + ') eggs on the wall. ' + s + ' eggs. Take one down, pass it around. ' + p + ' eggs on the wall.');
+  var p = dozenal.spell(n-1).replace(/^([a-z])/, function (m, m1) { return m1.toUpperCase();});
+  if (s.match(/(gross|grand)$/)) {
+    s += ' of';
+  }
+  if (p.match(/(gross|grand)$/)) {
+    p += ' of';
+  }
+
+  var n1 = 'egg';
+  if (n != 1) {
+    n1 += 's';
+  }
+  var n2 = 'egg';
+  if (n != 2) {
+    n2 += 's';
+  }
+  console.log(s + ' ' + n1 + ' on the wall. ' + s + ' ' + n1 + '. Take one down, pass it around. ' + p + ' ' + n2 + ' on the wall.');
 }
