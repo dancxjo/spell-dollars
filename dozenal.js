@@ -156,17 +156,17 @@ for (var i = 0; i <= 100000; i++) {
 }
 */
 
-console.log(decimal.encode(1000), decimal.spell(1000));
-console.log(decimal.encode(999), decimal.spell(999));
-console.log(decimal.encode(100000), decimal.spell(100000));
-console.log(decimal.encode(99999), decimal.spell(99999));
+var bases = [binary, decimal, dozenal, hexadecimal, base36];
+for (var i in bases) {
+  var base = bases[i];
+  var m = Math.pow(base.base, 10);
+  console.log(base.encode(m), base.spell(m));
+  console.log(base.encode(m-1), base.spell(m-1));
+}
 
-console.log(decimal.encode(1000000000000), decimal.spell(1000000000000));
-console.log(decimal.encode(999999999999), decimal.spell(999999999999));
-
-for (var n = 1000000; n > 0;) {
+for (var n = 144; n > 0;) {
   var s = dozenal.spell(n).replace(/^([a-z])/, function (m, m1) { return m1.toUpperCase();});
   var v = dozenal.encode(n);
   var p = dozenal.spell(--n).replace(/^([a-z])/, function (m, m1) { return m1.toUpperCase();});
-  console.log(s + ' (' + v + ') bottles of beer on the wall. ' + s + ' bottles of beer. Take one down, pass it around. ' + p + ' bottle of beers on the wall.');
+  console.log(s + ' (' + v + ') eggs on the wall. ' + s + ' eggs. Take one down, pass it around. ' + p + ' eggs on the wall.');
 }
