@@ -17,7 +17,7 @@ var digits = (Array.prototype.map).call('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 
 
 //console.dir(digits);
 
-function PositionalNumberSystem(base, ordersOfMagnitude, sanitizers) {
+function PositionalNumberSystem(base, ordersOfMagnitude, higherOrders, sanitizers, groupLength, separator) {
   if (base < 2 || base > 36) {
     throw new RangeError('Only bases from 2 to 36 are supported');
   }
@@ -25,7 +25,10 @@ function PositionalNumberSystem(base, ordersOfMagnitude, sanitizers) {
   this.base = base;
   this.digits = digits.slice(0, this.base);
   this.ordersOfMagnitude = ordersOfMagnitude || [];
+  this.higherOrders = higherOrders || [];
   this.sanitizers = sanitizers || [];
+  this.groupLength = groupLength || 3;
+  this.separator = separator || ' ';
 }
 
 PositionalNumberSystem.prototype = {
@@ -48,13 +51,7 @@ PositionalNumberSystem.prototype = {
   },
 
   encode: function (value) {
-    return this.getDigitArray(value).reduce(function(previous, digit) {
-      if (digit.value != 0 || previous != '') {
-        return previous + digit.form;
-      } else {
-        return '';
-      }
-    }, '') || this.digits[0].form;
+    return this.grouped(this.getDigitArray(value)).map(this.flatten).join(this.separator) || this.digits[0].form;
   },
 
   sanitize: function (string) {
@@ -63,41 +60,68 @@ PositionalNumberSystem.prototype = {
     }, string);
   },
 
-  spell: function (value) {
+  flatten: function (digits) {
+    return digits.reduce(function (previous, digit) {
+      return previous + digit.form;
+    }, '');
+  },
+
+  grouped: function (digits) {
+    var groupLength = this.groupLength;
+
+    // Break into groups
+    var grouped = digits.reduce(function (groups, digit, index, arr) {
+      var order = arr.length - 1 - index;
+      groups[groups.length - 1].push(digit);
+
+      if (order > 0 && order % groupLength === 0) {
+        groups.push([]);
+      }
+      return groups;
+    }, [[]]);
+
+    return grouped;
+  },
+
+  _spellGroup: function (digits) {
     var orders = this.ordersOfMagnitude;
     var base = this.base;
-    return this.sanitize(this.getDigitArray(value).reduce(function(previous, digit, revOrder, arr) {
+
+    return this.sanitize(digits.reduce(function(previous, digit, revOrder, arr) {
       var order = arr.length - revOrder - 1;
       var spell = previous;
       if (digit.value != 0) {
         spell += ' ';
         spell += digit.name;
-      }
-      if (order > 0) {
-        spell += ' ' + (orders[order]||base+'^'+order);
-      }
-      return spell;
-    }, '') || this.digits[0].name);
+        if (order > 0) {
+          spell += ' ' + (orders[order]||base+'^'+order);
+        }
 
+      }
+
+      return spell;
+    }, ''));
+  },
+
+  _spell: function (digits) {
+    var higherOrders = this.higherOrders;
+    return this.grouped(digits).map(this._spellGroup, this).reduce(function (previous, current, index, arr) {
+      var order = arr.length - 1 - index;
+      var orderName = higherOrders[order];
+      return (previous + (current ? current + (orderName?' ' + orderName : ''):'')).trim();
+    }, '');
+  },
+
+  spell: function (value) {
+    return this._spell(this.getDigitArray(value));
   }
 };
 
-var binary = new PositionalNumberSystem(2, ['', 'pair', 'quartet', 'octet']);
-var ternary = new PositionalNumberSystem(3, ['', 'trio', 'nonet']);
-var quartal = new PositionalNumberSystem(4, ['', 'quartet']);
-var quintal = new PositionalNumberSystem(5, ['', 'hand']);
-var sextal = new PositionalNumberSystem(6, ['', 'sextet']);
-var septal = new PositionalNumberSystem(7, ['', 'septet']);
-var octal = new PositionalNumberSystem(8, ['', 'octet']);
+var binary = new PositionalNumberSystem(2, ['', 'pair', 'quartet', 'octet'], [], [], 4);
 var decimal = new PositionalNumberSystem(
     10,
-    [
-      '', 'ten', 'hundred',
-      'thousand', 'ten', 'hundred',
-      'million', 'ten', 'hundred',
-      'billion', 'ten', 'hundred',
-      'trillion', 'ten', 'hundred'
-    ],
+    ['', 'ten', 'hundred'],
+    ['', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion'],
     [
       ["one ten", "ten"],
       ["two ten", "twenty"],
@@ -117,16 +141,32 @@ var decimal = new PositionalNumberSystem(
       ["ten seven", "seventeen"],
       ["ten eight", "eighteen"],
       ["ten nine", "nineteen"],
-    ]
+    ], 3, ','
   );
-var dozenal = new PositionalNumberSystem(12, ['', 'dozen', 'gross', 'grand', 'dozen', 'gross']);
-var hexadecimal = new PositionalNumberSystem(16, ['', 'hex', 'byte', 'grand', 'hex', 'byte']);
-var base36 = new PositionalNumberSystem(36, ['', 'trix', 'hectox', 'kilox', 'trix', 'hectox', 'megax', 'trix', 'hectox', 'gigax', 'trix', 'hectox']);
-
+var dozenal = new PositionalNumberSystem(12, ['', 'dozen', 'gross'], ['', 'grand', 'great-grand', 'great-great-grand'], [], 3, ' ');
+var hexadecimal = new PositionalNumberSystem(16, ['', 'hex', 'byte'], [], [], 2, ' ');
+var base36 = new PositionalNumberSystem(36, ['', 'trix', 'hectox'], ['kilox', 'megax', 'gigax'], [], 3, ',');
+/*
 for (var i = 0; i <= 100000; i++) {
   console.log(binary.encode(i), binary.spell(i));
   console.log(decimal.encode(i), decimal.spell(i));
   console.log(dozenal.encode(i), dozenal.spell(i));
   console.log(hexadecimal.encode(i), hexadecimal.spell(i));
   console.log(base36.encode(i), base36.spell(i));
+}
+*/
+
+console.log(decimal.encode(1000), decimal.spell(1000));
+console.log(decimal.encode(999), decimal.spell(999));
+console.log(decimal.encode(100000), decimal.spell(100000));
+console.log(decimal.encode(99999), decimal.spell(99999));
+
+console.log(decimal.encode(1000000000000), decimal.spell(1000000000000));
+console.log(decimal.encode(999999999999), decimal.spell(999999999999));
+
+for (var n = 1000000; n > 0;) {
+  var s = dozenal.spell(n).replace(/^([a-z])/, function (m, m1) { return m1.toUpperCase();});
+  var v = dozenal.encode(n);
+  var p = dozenal.spell(--n).replace(/^([a-z])/, function (m, m1) { return m1.toUpperCase();});
+  console.log(s + ' (' + v + ') bottles of beer on the wall. ' + s + ' bottles of beer. Take one down, pass it around. ' + p + ' bottle of beers on the wall.');
 }
