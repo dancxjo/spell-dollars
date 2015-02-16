@@ -119,9 +119,9 @@ var decimal = new PositionalNumberSystem(
       ["ten nine", "nineteen"],
     ]
   );
-var dozenal = new PositionalNumberSystem(12, ['', 'dozen', 'gross', 'grand', 'dozen grand', 'gross grand']);
-var hexadecimal = new PositionalNumberSystem(16, ['', 'hex', 'byte', 'grand', 'hex grand', 'byte grand']);
-var base36 = new PositionalNumberSystem(36, ['', 'trix', 'hectox', 'kilox', 'trix kilox', 'hectox kilox', 'megax', 'trix megax', 'hectox megax', 'gigax', 'trix gigax', 'hectox gigax']);
+var dozenal = new PositionalNumberSystem(12, ['', 'dozen', 'gross', 'grand', 'dozen', 'gross']);
+var hexadecimal = new PositionalNumberSystem(16, ['', 'hex', 'byte', 'grand', 'hex', 'byte']);
+var base36 = new PositionalNumberSystem(36, ['', 'trix', 'hectox', 'kilox', 'trix', 'hectox', 'megax', 'trix', 'hectox', 'gigax', 'trix', 'hectox']);
 
 for (var i = 0; i <= 100000; i++) {
   console.log(binary.encode(i), binary.spell(i));
