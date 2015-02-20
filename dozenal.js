@@ -117,7 +117,7 @@ PositionalNumberSystem.prototype = {
   }
 };
 
-var binary = new PositionalNumberSystem(2, ['', 'pair', 'quartet', 'octet'], [], [], 4);
+var binary = new PositionalNumberSystem(2, ['', 'pair', 'quartet', 'octet'], ['', 'kilob', 'megab', 'gigab'], [], 4);
 var decimal = new PositionalNumberSystem(
     10,
     ['', 'ten', 'hundred'],
@@ -144,8 +144,8 @@ var decimal = new PositionalNumberSystem(
     ], 3, ','
   );
 var dozenal = new PositionalNumberSystem(12, ['', 'dozen', 'gross'], ['', 'grand', 'great-grand', 'great-great-grand'], [], 3, ' ');
-var hexadecimal = new PositionalNumberSystem(16, ['', 'hex', 'byte'], [], [], 2, ' ');
-var base36 = new PositionalNumberSystem(36, ['', 'trix', 'hectox'], ['kilox', 'megax', 'gigax'], [], 3, ',');
+var hexadecimal = new PositionalNumberSystem(16, ['', 'hex', 'hectohex'], ['', 'kilohex', 'megahex', 'gigahex'], [], 2, ' ');
+var base36 = new PositionalNumberSystem(36, ['', 'square-six', 'cubic-six'], ['kilox', 'megax', 'gigax'], [], 3, ',');
 /*
 for (var i = 0; i <= 100000; i++) {
   console.log(binary.encode(i), binary.spell(i));
@@ -159,7 +159,7 @@ for (var i = 0; i <= 100000; i++) {
 var bases = [binary, decimal, dozenal, hexadecimal, base36];
 for (var i in bases) {
   var base = bases[i];
-  var m = Math.pow(base.base, 10);
+  var m = Math.pow(base.base, 6);
   console.log(base.encode(m), base.spell(m));
   console.log(base.encode(m-1), base.spell(m-1));
 }
